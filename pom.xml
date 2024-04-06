@@ -43,15 +43,9 @@
 
 
     <build>
-        <resources> <!-- Не понимаю, зачем эта секция, ведь я могу это указать в плагине.
-         Тоесть, как я понимаю, можно делать это через resources,
-          а можно указать в плагине, что копировать!?-->
-            <resource>
-                <directory>src/main</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
-            </resource>
+        <resources> <!-- Не понимаю, что здесь написать, чтобы плагин maven-jar-plugin
+        копировал зависимости. Получилось просто настроить плагин для этого!-->
+
         </resources>
         <plugins>
             <!-- Usual compilation -->
@@ -86,6 +80,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
+                            <includeScope>compile</includeScope>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
                         </configuration>
                     </execution>
@@ -111,8 +106,20 @@
                     </archive>
                 </configuration>
             </plugin>
-
-
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <includes>
+                    <include>DirectionTest</include>
+                        <include>FinishLineTest</include>
+                    </includes>
+                    <excludes>
+                    <exclude>StrangeTest</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
